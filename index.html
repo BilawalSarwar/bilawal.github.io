@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilawal Sarwar | Professional CV</title>
+    <title>Bilawal Sarwar - Portfolio</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -14,472 +14,168 @@
             --secondary-color: #3498db;
             --light-color: #f8f9fa;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            padding-top: 60px;
-        }
+        
+        /* Header Styles */
         .navbar {
             background-color: var(--primary-color) !important;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 4rem 0 3rem;
+        
+        .navbar-brand {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: white !important;
         }
-        .profile-img {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border: 4px solid white;
-        }
-        .section-title {
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-        }
-        .timeline-item {
+        
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
             position: relative;
-            padding-left: 2rem;
-            margin-bottom: 2.5rem;
-            border-left: 2px solid var(--light-color);
-            padding-bottom: 1.5rem;
+            padding: 0.5rem 0 !important;
         }
-        .timeline-item:last-child {
-            border-left: 2px solid transparent;
-        }
-        .timeline-item:before {
+        
+        .nav-link::after {
             content: '';
             position: absolute;
-            left: -11px;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            background: var(--secondary-color);
-            border-radius: 50%;
-            border: 4px solid white;
+            width: 0;
+            height: 2px;
+            background: white;
+            bottom: 0;
+            left: 0;
+            transition: all 0.3s ease;
         }
-        .skill-pill {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            display: inline-block;
-            font-size: 0.9rem;
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
         }
-        .card-hover {
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+        
         .nav-link.active {
+            color: white !important;
             font-weight: 600;
-            color: var(--secondary-color) !important;
         }
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f8f9fa;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #2c3e50;
-            transition: all 0.3s;
-            margin: 0 5px;
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-        .social-icon:hover {
-            transform: translateY(-3px);
-            color: #3498db;
-            text-decoration: none;
-        }
-        .contact-card {
-            transition: all 0.3s;
-            border: none;
-            border-radius: 10px;
-        }
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        
+        /* Section padding to account for fixed header */
+        section {
+            padding-top: 80px;
+            margin-top: -80px;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Bilawal Sarwar</a>
+            <a class="navbar-brand" href="#">SILITY</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#summary">Summary</a>
+                        <a class="nav-link active" href="#home">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#experience">Experience</a>
+                        <a class="nav-link" href="#about">ABOUT</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#education">Education</a>
+                        <a class="nav-link" href="#skills">SKILL</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#skills">Skills</a>
+                        <a class="nav-link" href="#experience">EXPERIENCE</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#projects">Projects</a>
+                        <a class="nav-link" href="#education">EDUCATION</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#certifications">Certifications</a>
+                        <a class="nav-link" href="#work">WORK</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
+                        <a class="nav-link" href="#blog">BLOG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">CONTACT</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Header Section -->
-    <header id="summary" class="header text-center mb-5">
+    <!-- Your Content Sections -->
+    <section id="home" class="py-5 min-vh-100 d-flex align-items-center">
         <div class="container">
-            <img src="images/profile.jpg" alt="Bilawal Sarwar" class="profile-img rounded-circle mb-4">
-            <h1 class="display-4 fw-bold mb-3">Bilawal Sarwar</h1>
-            <p class="lead mb-4">Senior Software Engineer | Cloud Specialist</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="https://www.linkedin.com/in/bilawalsarwar/" class="btn btn-light btn-lg px-4">
-                    <i class="fab fa-linkedin me-2"></i> LinkedIn Profile
-                </a>
-                <a href="#contact" class="btn btn-outline-light btn-lg px-4">
-                    <i class="fas fa-envelope me-2"></i> Contact Me
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mb-5">
-        <!-- Professional Summary -->
-        <section class="mb-5">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="section-title">Professional Summary</h2>
-                    <p class="lead">Experienced software engineer with 5+ years of expertise in full-stack development, cloud architecture, and system optimization. Proven track record of delivering scalable solutions for enterprise clients.</p>
-                    <p>Specialized in Java, Python, and AWS cloud services with strong background in DevOps practices and team leadership.</p>
-                </div>
-            </div>
-        </section>
-
-        <div class="row">
-            <!-- Left Column -->
-            <div class="col-lg-8">
-                <!-- Work Experience -->
-                <section id="experience" class="mb-5">
-                    <h2 class="section-title">Work Experience</h2>
-                    
-                    <div class="card card-hover mb-4">
-                        <div class="card-body">
-                            <div class="timeline-item">
-                                <h4>Senior Software Engineer</h4>
-                                <h5>Tech Solutions Inc. | Full-time</h5>
-                                <p class="text-muted">Jan 2020 - Present | Karachi, Pakistan</p>
-                                <ul>
-                                    <li>Lead a team of 5 developers in building enterprise SaaS solutions</li>
-                                    <li>Reduced system latency by 40% through query optimization</li>
-                                    <li>Implemented CI/CD pipelines reducing deployment time by 75%</li>
-                                    <li>Mentored junior developers in Agile methodologies</li>
-                                </ul>
-                                <span class="badge bg-primary">Java</span>
-                                <span class="badge bg-primary">Spring Boot</span>
-                                <span class="badge bg-primary">AWS</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card card-hover mb-4">
-                        <div class="card-body">
-                            <div class="timeline-item">
-                                <h4>Software Developer</h4>
-                                <h5>Digital Innovations Ltd. | Full-time</h5>
-                                <p class="text-muted">Jun 2017 - Dec 2019 | Karachi, Pakistan</p>
-                                <ul>
-                                    <li>Developed RESTful APIs for mobile banking application</li>
-                                    <li>Automated testing procedures increasing coverage by 60%</li>
-                                    <li>Collaborated with cross-functional teams on system integration</li>
-                                </ul>
-                                <span class="badge bg-primary">Python</span>
-                                <span class="badge bg-primary">Django</span>
-                                <span class="badge bg-primary">MySQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Projects -->
-                <section id="projects" class="mb-5">
-                    <h2 class="section-title">Projects</h2>
-                    
-                    <div class="card card-hover mb-4">
-                        <div class="card-body">
-                            <h4>Enterprise Resource Planning System</h4>
-                            <p class="text-muted">Tech Solutions Inc. | 2021-2022</p>
-                            <p>Led development of comprehensive ERP system integrating finance, HR, and inventory modules serving 50+ corporate clients.</p>
-                            <ul>
-                                <li>Reduced processing time by 65% through optimized workflows</li>
-                                <li>Implemented role-based access control system</li>
-                            </ul>
-                            <span class="badge bg-secondary">Microservices</span>
-                            <span class="badge bg-secondary">Docker</span>
-                            <span class="badge bg-secondary">Kubernetes</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card card-hover mb-4">
-                        <div class="card-body">
-                            <h4>E-Commerce Platform</h4>
-                            <p class="text-muted">Digital Innovations Ltd. | 2018-2019</p>
-                            <p>Full-stack development of B2B e-commerce platform with payment gateway integration.</p>
-                            <ul>
-                                <li>Increased conversion rate by 30% through UI improvements</li>
-                                <li>Implemented real-time inventory tracking</li>
-                            </ul>
-                            <span class="badge bg-secondary">React</span>
-                            <span class="badge bg-secondary">Node.js</span>
-                            <span class="badge bg-secondary">MongoDB</span>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Right Column -->
-            <div class="col-lg-4">
-                <!-- Education -->
-                <section id="education" class="mb-5">
-                    <h2 class="section-title">Education</h2>
-                    <div class="card card-hover mb-4">
-                        <div class="card-body">
-                            <div class="timeline-item">
-                                <h4>BS Computer Science</h4>
-                                <h5>University of Karachi</h5>
-                                <p class="text-muted">2013 - 2017</p>
-                                <p>Graduated with Honors (GPA: 3.8/4.0)</p>
-                                <p>Specialization in Distributed Systems</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Skills -->
-                <section id="skills" class="mb-5">
-                    <h2 class="section-title">Skills</h2>
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <h5 class="mb-3">Technical Skills</h5>
-                            <div class="mb-4">
-                                <span class="skill-pill">Java</span>
-                                <span class="skill-pill">Python</span>
-                                <span class="skill-pill">JavaScript</span>
-                                <span class="skill-pill">Spring Boot</span>
-                                <span class="skill-pill">React</span>
-                                <span class="skill-pill">Node.js</span>
-                                <span class="skill-pill">SQL</span>
-                                <span class="skill-pill">MongoDB</span>
-                                <span class="skill-pill">Docker</span>
-                                <span class="skill-pill">Kubernetes</span>
-                                <span class="skill-pill">AWS</span>
-                                <span class="skill-pill">Azure</span>
-                                <span class="skill-pill">Git</span>
-                                <span class="skill-pill">CI/CD</span>
-                            </div>
-                            
-                            <h5 class="mb-3">Professional Skills</h5>
-                            <div>
-                                <span class="skill-pill">Team Leadership</span>
-                                <span class="skill-pill">Agile Methodologies</span>
-                                <span class="skill-pill">System Architecture</span>
-                                <span class="skill-pill">Technical Documentation</span>
-                                <span class="skill-pill">Mentoring</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Certifications -->
-                <section id="certifications" class="mb-5">
-                    <h2 class="section-title">Certifications</h2>
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <ul class="list-unstyled">
-                                <li class="mb-3">
-                                    <h5>AWS Certified Solutions Architect</h5>
-                                    <p class="text-muted">Amazon Web Services | 2022</p>
-                                </li>
-                                <li class="mb-3">
-                                    <h5>Oracle Certified Professional</h5>
-                                    <p class="text-muted">Oracle | 2020</p>
-                                </li>
-                                <li class="mb-3">
-                                    <h5>Microsoft Certified: Azure Fundamentals</h5>
-                                    <p class="text-muted">Microsoft | 2021</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </main>
-
-    <!-- Contact Section -->
-    <section id="contact" class="bg-light py-5">
-        <div class="container">
-            <h2 class="section-title text-center mb-5">Contact Information</h2>
-            
-            <!-- Combined Map + Contact Cards + Social Media -->
-            <div class="row mt-4">
-                <!-- Map Column -->
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="card contact-card h-100">
-                        <div class="card-body p-0">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.186873926636!2d67.0282473150001!3d24.84172258406748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33c5361ff85a5%3A0x2401821560d53462!2sKarachi%2C%20Pakistan!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" 
-                                width="100%" 
-                                height="100%" 
-                                style="min-height: 300px; border:0; border-radius: 8px 8px 0 0;" 
-                                allowfullscreen="" 
-                                loading="lazy">
-                            </iframe>
-                            <div class="p-4">
-                                <h5><i class="fas fa-map-marker-alt text-primary me-2"></i>Location</h5>
-                                <p class="mb-0">Karachi, Pakistan</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Contact Info Column -->
-                <div class="col-lg-6">
-                    <div class="row">
-                        <!-- Email Card -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card contact-card h-100">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
-                                    <h5>Email</h5>
-                                    <p class="text-muted mb-3">bilawal.sarwar@example.com</p>
-                                    <a href="mailto:bilawal.sarwar@example.com" class="btn btn-sm btn-outline-primary">
-                                        Send Email
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Phone Card -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card contact-card h-100">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-phone fa-3x text-primary mb-3"></i>
-                                    <h5>Phone</h5>
-                                    <p class="text-muted mb-3">+92 300 1234567</p>
-                                    <a href="tel:+923001234567" class="btn btn-sm btn-outline-primary">
-                                        Call Now
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Social Media Card -->
-                        <div class="col-12">
-                            <div class="card contact-card">
-                                <div class="card-body text-center">
-                                    <h5 class="mb-3">Connect With Me</h5>
-                                    <div class="d-flex justify-content-center">
-                                        <a href="https://linkedin.com/in/bilawalsarwar" class="social-icon">
-                                            <i class="fab fa-linkedin-in"></i>
-                                        </a>
-                                        <a href="https://github.com/BilawalSarwar" class="social-icon">
-                                            <i class="fab fa-github"></i>
-                                        </a>
-                                        <a href="#" class="social-icon">
-                                            <i class="fab fa-twitter"></i>
-                                        </a>
-                                        <a href="#" class="social-icon">
-                                            <i class="fab fa-stack-overflow"></i>
-                                        </a>
-                                    </div>
-                                    <hr class="my-3">
-                                    <a href="#" class="btn btn-primary btn-sm">
-                                        <i class="far fa-calendar me-2"></i> Schedule Meeting
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Download Resume Button -->
-            <div class="text-center mt-5">
-                <a href="path/to/your-resume.pdf" class="btn btn-primary btn-lg px-4 py-2" download>
-                    <i class="fas fa-download me-2"></i> Download Full Resume (PDF)
-                </a>
-                <p class="text-muted mt-2">Updated: June 2023 | File size: 2.4MB</p>
-            </div>
+            <h1>Home Section</h1>
+            <!-- Your home content -->
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container text-center">
-            <p class="mb-0">© <span id="year"></span> Bilawal Sarwar. All rights reserved.</p>
+    
+    <section id="about" class="py-5 min-vh-100 d-flex align-items-center">
+        <div class="container">
+            <h1>About Section</h1>
+            <!-- Your about content -->
         </div>
-    </footer>
+    </section>
+    
+    <!-- Add other sections similarly -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
+    
+    <!-- Animated Navbar Script -->
     <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            // Highlight active section on scroll
+            window.addEventListener('scroll', () => {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (pageYOffset >= (sectionTop - 100)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 });
             });
         });
-
-        // Active nav link highlighting
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // Current year in footer
-        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
