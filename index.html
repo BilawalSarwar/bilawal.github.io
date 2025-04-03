@@ -83,6 +83,32 @@
             font-weight: 600;
             color: var(--secondary-color) !important;
         }
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e50;
+            transition: all 0.3s;
+            margin: 0 5px;
+        }
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: #3498db;
+            text-decoration: none;
+        }
+        .contact-card {
+            transition: all 0.3s;
+            border: none;
+            border-radius: 10px;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -315,39 +341,96 @@
     <section id="contact" class="bg-light py-5">
         <div class="container">
             <h2 class="section-title text-center mb-5">Contact Information</h2>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5><i class="fas fa-envelope me-2"></i> Email</h5>
-                                    <p>bilawal.sarwar@example.com</p>
-                                    
-                                    <h5 class="mt-4"><i class="fas fa-phone me-2"></i> Phone</h5>
-                                    <p>+92 300 1234567</p>
+            
+            <!-- Combined Map + Contact Cards + Social Media -->
+            <div class="row mt-4">
+                <!-- Map Column -->
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="card contact-card h-100">
+                        <div class="card-body p-0">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.186873926636!2d67.0282473150001!3d24.84172258406748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33c5361ff85a5%3A0x2401821560d53462!2sKarachi%2C%20Pakistan!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" 
+                                width="100%" 
+                                height="100%" 
+                                style="min-height: 300px; border:0; border-radius: 8px 8px 0 0;" 
+                                allowfullscreen="" 
+                                loading="lazy">
+                            </iframe>
+                            <div class="p-4">
+                                <h5><i class="fas fa-map-marker-alt text-primary me-2"></i>Location</h5>
+                                <p class="mb-0">Karachi, Pakistan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Info Column -->
+                <div class="col-lg-6">
+                    <div class="row">
+                        <!-- Email Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card contact-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+                                    <h5>Email</h5>
+                                    <p class="text-muted mb-3">bilawal.sarwar@example.com</p>
+                                    <a href="mailto:bilawal.sarwar@example.com" class="btn btn-sm btn-outline-primary">
+                                        Send Email
+                                    </a>
                                 </div>
-                                <div class="col-md-6">
-                                    <h5><i class="fas fa-map-marker-alt me-2"></i> Location</h5>
-                                    <p>Karachi, Pakistan</p>
-                                    
-                                    <h5 class="mt-4"><i class="fas fa-globe me-2"></i> Online Profiles</h5>
-                                    <div class="d-flex gap-3">
-                                        <a href="https://www.linkedin.com/in/bilawalsarwar/" class="text-dark">
-                                            <i class="fab fa-linkedin fa-2x"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card contact-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-phone fa-3x text-primary mb-3"></i>
+                                    <h5>Phone</h5>
+                                    <p class="text-muted mb-3">+92 300 1234567</p>
+                                    <a href="tel:+923001234567" class="btn btn-sm btn-outline-primary">
+                                        Call Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Media Card -->
+                        <div class="col-12">
+                            <div class="card contact-card">
+                                <div class="card-body text-center">
+                                    <h5 class="mb-3">Connect With Me</h5>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="https://linkedin.com/in/bilawalsarwar" class="social-icon">
+                                            <i class="fab fa-linkedin-in"></i>
                                         </a>
-                                        <a href="https://github.com/BilawalSarwar" class="text-dark">
-                                            <i class="fab fa-github fa-2x"></i>
+                                        <a href="https://github.com/BilawalSarwar" class="social-icon">
+                                            <i class="fab fa-github"></i>
                                         </a>
-                                        <a href="#" class="text-dark">
-                                            <i class="fab fa-twitter fa-2x"></i>
+                                        <a href="#" class="social-icon">
+                                            <i class="fab fa-twitter"></i>
+                                        </a>
+                                        <a href="#" class="social-icon">
+                                            <i class="fab fa-stack-overflow"></i>
                                         </a>
                                     </div>
+                                    <hr class="my-3">
+                                    <a href="#" class="btn btn-primary btn-sm">
+                                        <i class="far fa-calendar me-2"></i> Schedule Meeting
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Download Resume Button -->
+            <div class="text-center mt-5">
+                <a href="path/to/your-resume.pdf" class="btn btn-primary btn-lg px-4 py-2" download>
+                    <i class="fas fa-download me-2"></i> Download Full Resume (PDF)
+                </a>
+                <p class="text-muted mt-2">Updated: June 2023 | File size: 2.4MB</p>
             </div>
         </div>
     </section>
