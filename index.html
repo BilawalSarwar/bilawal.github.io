@@ -18,6 +18,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            padding-top: 56px; /* Space for fixed navbar */
+        }
+        .navbar {
+            background-color: var(--primary-color) !important;
         }
         .header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -64,8 +68,37 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Bilawal Sarwar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#summary">Summary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experience">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#education">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <!-- Header Section -->
-    <header class="header text-center mb-5">
+    <header id="summary" class="header text-center mb-5">
         <div class="container">
             <img src="images/profile.jpg" alt="Bilawal Sarwar" class="profile-img rounded-circle mb-4">
             <h1 class="display-4 fw-bold mb-3">Bilawal Sarwar</h1>
@@ -86,14 +119,8 @@
         <div class="row">
             <!-- Left Column -->
             <div class="col-lg-8">
-                <!-- Professional Summary -->
-                <section class="mb-5">
-                    <h2 class="section-title">Professional Summary</h2>
-                    <p>Results-driven IT professional with 5+ years of experience in software development and system architecture. Specialized in building scalable enterprise solutions with expertise in full-stack development, cloud computing, and database management.</p>
-                </section>
-
                 <!-- Work Experience -->
-                <section class="mb-5">
+                <section id="experience" class="mb-5">
                     <h2 class="section-title">Work Experience</h2>
                     
                     <div class="timeline-item">
@@ -118,22 +145,12 @@
                         </ul>
                     </div>
                 </section>
-
-                <!-- Education -->
-                <section class="mb-5">
-                    <h2 class="section-title">Education</h2>
-                    <div class="timeline-item">
-                        <h4>BS Computer Science</h4>
-                        <h5>University of Karachi</h5>
-                        <p class="text-muted">2013 - 2017 | GPA: 3.8/4.0</p>
-                    </div>
-                </section>
             </div>
 
             <!-- Right Column -->
             <div class="col-lg-4">
                 <!-- Skills -->
-                <section class="mb-5">
+                <section id="skills" class="mb-5">
                     <h2 class="section-title">Technical Skills</h2>
                     <div>
                         <span class="skill-pill">Java</span>
@@ -149,32 +166,39 @@
                     </div>
                 </section>
 
-                <!-- Certifications -->
-                <section class="mb-5">
-                    <h2 class="section-title">Certifications</h2>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <strong>AWS Certified Solutions Architect</strong>
-                            <p class="text-muted">2022</p>
-                        </li>
-                        <li class="mb-2">
-                            <strong>Oracle Certified Professional</strong>
-                            <p class="text-muted">2020</p>
-                        </li>
-                    </ul>
-                </section>
-
-                <!-- Languages -->
-                <section class="mb-5">
-                    <h2 class="section-title">Languages</h2>
-                    <ul class="list-unstyled">
-                        <li>English (Fluent)</li>
-                        <li>Urdu (Native)</li>
-                    </ul>
+                <!-- Education -->
+                <section id="education" class="mb-5">
+                    <h2 class="section-title">Education</h2>
+                    <div class="timeline-item">
+                        <h4>BS Computer Science</h4>
+                        <h5>University of Karachi</h5>
+                        <p class="text-muted">2013 - 2017 | GPA: 3.8/4.0</p>
+                    </div>
                 </section>
             </div>
         </div>
     </main>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-light py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Contact</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Get In Touch</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-3"><i class="fas fa-envelope me-2"></i> bilawal.sarwar@example.com</li>
+                                <li class="mb-3"><i class="fas fa-phone me-2"></i> +92 300 1234567</li>
+                                <li class="mb-3"><i class="fas fa-map-marker-alt me-2"></i> Karachi, Pakistan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-4">
@@ -185,5 +209,16 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Smooth Scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
