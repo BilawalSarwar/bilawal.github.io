@@ -582,112 +582,231 @@
         // Current year in footer
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Certification Network Graph
-        document.addEventListener('DOMContentLoaded', function() {
-            const width = document.getElementById('certification-graph').clientWidth;
-            const height = 400;
-            const tooltip = d3.select('.cert-tooltip');
+       <!-- Replace the existing script section with this animated version -->
 
-            // Certification data - replace with your actual certifications
-            const certs = [
-                { id: "cdmp", name: "CDMP Master", issuer: "DAMA International", year: "2023", img: "images/cdmp-master-badge.png" },
-                { id: "aws", name: "AWS Certified", issuer: "Amazon Web Services", year: "2022", img: "images/cdmp-master-badge.png" },
-                { id: "oracle", name: "Oracle Certified", issuer: "Oracle", year: "2020", img: "images/cdmp-master-badge.png" },
-                { id: "azure", name: "Azure Certified", issuer: "Microsoft", year: "2021", img: "images/cdmp-master-badge.png" },
-                { id: "google", name: "Google Certified", issuer: "Google Cloud", year: "2022", img: "images/cdmp-master-badge.png" }
-            ];
+    // Certification Network Graph with Animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const width = document.getElementById('certification-graph').clientWidth;
+        const height = 400;
+        const tooltip = d3.select('.cert-tooltip');
 
-            // Create connections between certifications
-            const links = [
-                { source: "cdmp", target: "aws", value: 1 },
-                { source: "cdmp", target: "oracle", value: 1 },
-                { source: "cdmp", target: "azure", value: 1 },
-                { source: "aws", target: "azure", value: 1 },
-                { source: "oracle", target: "google", value: 1 }
-            ];
-
-            const svg = d3.select("#certification-graph")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height);
-
-            const simulation = d3.forceSimulation()
-                .force("link", d3.forceLink().id(d => d.id).distance(120))
-                .force("charge", d3.forceManyBody().strength(-200))
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                .force("collision", d3.forceCollide().radius(50));
-
-            // Draw links
-            const link = svg.append("g")
-                .selectAll("line")
-                .data(links)
-                .enter().append("line")
-                .attr("stroke", "#3498db")
-                .attr("stroke-opacity", 0.6)
-                .attr("stroke-width", 2);
-
-            // Create groups for each certification
-            const node = svg.append("g")
-                .selectAll(".node")
-                .data(certs)
-                .enter().append("g")
-                .attr("class", "node")
-                .call(drag(simulation));
-
-            // Add images to nodes
-            node.append("image")
-                .attr("class", "cert-badge")
-                .attr("xlink:href", d => d.img)
-                .attr("x", -30)
-                .attr("y", -30)
-                .attr("width", 60)
-                .attr("height", 60)
-                .on("mouseover", function(event, d) {
-                    tooltip.transition().duration(200).style("opacity", 1);
-                    tooltip.html(`${d.name}<br>${d.issuer}<br>${d.year}`)
-                        .style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 28) + "px");
-                })
-                .on("mouseout", function() {
-                    tooltip.transition().duration(500).style("opacity", 0);
-                });
-
-            simulation.nodes(certs).on("tick", ticked);
-            simulation.force("link").links(links);
-
-            function ticked() {
-                link.attr("x1", d => d.source.x)
-                    .attr("y1", d => d.source.y)
-                    .attr("x2", d => d.target.x)
-                    .attr("y2", d => d.target.y);
-
-                node.attr("transform", d => `translate(${d.x},${d.y})`);
+        // Certification data with your actual image paths
+        const certs = [
+            { 
+                id: "cdmp", 
+                name: "CDMP Master", 
+                issuer: "DAMA International", 
+                year: "2023", 
+                img: "images/cdmp-master.png",
+                size: 70  // CDMP can be slightly larger
+            },
+            { 
+                id: "aws", 
+                name: "AWS Certified", 
+                issuer: "Amazon Web Services", 
+                year: "2022", 
+                img: "images/aws-certified.png",
+                size: 60
+            },
+            { 
+                id: "oracle", 
+                name: "Oracle Certified", 
+                issuer: "Oracle", 
+                year: "2020", 
+                img: "images/oracle-certified.png",
+                size: 60
+            },
+            { 
+                id: "azure", 
+                name: "Azure Certified", 
+                issuer: "Microsoft", 
+                year: "2021", 
+                img: "images/azure-certified.png",
+                size: 60
             }
+        ];
 
-            function drag(simulation) {
-                function dragstarted(event, d) {
-                    if (!event.active) simulation.alphaTarget(0.3).restart();
-                    d.fx = d.x;
-                    d.fy = d.y;
-                }
+        // Create connections between certifications
+        const links = [
+            { source: "cdmp", target: "aws", value: 2 },
+            { source: "cdmp", target: "oracle", value: 1 },
+            { source: "cdmp", target: "azure", value: 1 },
+            { source: "aws", target: "azure", value: 1 }
+        ];
+
+        const svg = d3.select("#certification-graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0, 0, width, height]);
+
+        // Create the simulation with stronger forces
+        const simulation = d3.forceSimulation(certs)
+            .force("link", d3.forceLink(links)
+                .id(d => d.id)
+                .distance(150)  // Increased distance
+                .strength(0.5)  // Stronger connections
+            .force("charge", d3.forceManyBody()
+                .strength(-300))  // Stronger repulsion
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide()
+                .radius(d => d.size + 5)  // Dynamic collision radius
+                .strength(0.7))
+            .force("x", d3.forceX(width / 2).strength(0.05))
+            .force("y", d3.forceY(height / 2).strength(0.05))
+            .alphaDecay(0.01)  // Slower decay for longer animation
+            .velocityDecay(0.4);  // More fluid movement
+
+        // Draw links with animation
+        const link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("stroke", "#3498db")
+            .attr("stroke-opacity", 0.6)
+            .attr("stroke-width", d => d.value)
+            .attr("stroke-dasharray", function() {
+                const length = this.getTotalLength();
+                return `${length} ${length}`;
+            })
+            .attr("stroke-dashoffset", function() {
+                return this.getTotalLength();
+            })
+            .transition()
+            .duration(2000)
+            .attr("stroke-dashoffset", 0);
+
+        // Create node groups with animation
+        const node = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll(".node")
+            .data(certs)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(drag(simulation));
+
+        // Add images with pulsing animation
+        node.append("image")
+            .attr("class", "cert-badge")
+            .attr("xlink:href", d => d.img)
+            .attr("x", d => -d.size/2)
+            .attr("y", d => -d.size/2)
+            .attr("width", d => d.size)
+            .attr("height", d => d.size)
+            .attr("opacity", 0)
+            .transition()
+            .duration(1000)
+            .attr("opacity", 1)
+            .on("mouseover", function(event, d) {
+                // Pause simulation on hover
+                simulation.alphaTarget(0).restart();
                 
-                function dragged(event, d) {
-                    d.fx = event.x;
-                    d.fy = event.y;
-                }
+                // Highlight animation
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("width", d.size * 1.2)
+                    .attr("height", d.size * 1.2)
+                    .attr("x", -d.size * 0.6)
+                    .attr("y", -d.size * 0.6);
                 
-                function dragended(event, d) {
-                    if (!event.active) simulation.alphaTarget(0);
-                    d.fx = null;
-                    d.fy = null;
-                }
+                // Show tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 30) + "px")
+                    .html(`<strong>${d.name}</strong><br>${d.issuer}<br>${d.year}`);
+            })
+            .on("mouseout", function(event, d) {
+                // Resume simulation
+                simulation.alphaTarget(0.1).restart();
                 
-                return d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended);
-            }
+                // Return to normal size
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("width", d.size)
+                    .attr("height", d.size)
+                    .attr("x", -d.size/2)
+                    .attr("y", -d.size/2);
+                
+                // Hide tooltip
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        // Add subtle pulsing glow effect
+        node.append("circle")
+            .attr("r", d => d.size/2 + 5)
+            .attr("fill", "none")
+            .attr("stroke", "#3498db")
+            .attr("stroke-width", 0)
+            .attr("stroke-opacity", 0)
+            .transition()
+            .delay(1000)
+            .duration(2000)
+            .attr("stroke-width", 2)
+            .attr("stroke-opacity", 0.3)
+            .call(g => g.transition()
+                .duration(3000)
+                .attr("stroke-width", 0)
+                .attr("stroke-opacity", 0)
+                .on("end", function() {
+                    d3.select(this).transition()
+                        .duration(3000)
+                        .attr("stroke-width", 2)
+                        .attr("stroke-opacity", 0.3);
+                }));
+
+        // Update positions on each tick
+        simulation.on("tick", () => {
+            link.attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+            
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
+
+        // Drag behavior with smooth animation
+        function drag(simulation) {
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0.1);
+                d.fx = null;
+                d.fy = null;
+                
+                // Add gentle throw animation
+                d.vx = event.subject.vx * 0.8;
+                d.vy = event.subject.vy * 0.8;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+
+        // Add periodic gentle movement
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                simulation.alphaTarget(0.1).restart();
+            }
+        }, 5000);
+    });
     </script>
 </body>
 </html>
