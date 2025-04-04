@@ -8,8 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- D3.js for Network Graph -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -112,7 +110,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        /* Certification Network Graph Styles */
+        /* NEW: Certification Network Graph Styles */
         #certification-graph {
             width: 100%;
             height: 400px;
@@ -138,7 +136,6 @@
             transition: opacity 0.2s;
             font-size: 0.9rem;
             z-index: 100;
-            max-width: 200px;
         }
         .graph-instruction {
             font-size: 0.8rem;
@@ -159,12 +156,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#summary">Summary</a>
+                        <a class="nav-link active" href="#summary">Summary</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#experience">Experience</a>
                     </li>
-                    <li class="nav-item">
+					<li class="nav-item">
                         <a class="nav-link" href="#projects">Projects</a>
                     </li>
                     <li class="nav-item">
@@ -366,6 +363,7 @@
                     <div class="card card-hover">
                         <div class="card-body">
                             <div id="certification-graph"></div>
+                            <div class="cert-tooltip"></div>
                             <p class="graph-instruction">Drag badges to explore connections between certifications</p>
                         </div>
                     </div>
@@ -548,234 +546,270 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <!-- D3.js for Network Graph -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Custom JS -->
     <script>
-// Fixed Navigation Highlighting
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all sections that should be highlighted
-    const sections = document.querySelectorAll('section[id], header[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    // Function to update active nav link
-    function updateActiveNav() {
-        let current = '';
-        const scrollPosition = window.scrollY + 200; // Adding offset
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Active nav link highlighting
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
         
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
             
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        // Update nav links
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-        
-        // Fallback for home section
-        if (scrollPosition < 200) {
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === '#summary') {
+                if (link.getAttribute('href') === `#${current}`) {
                     link.classList.add('active');
                 }
             });
-        }
-    }
-
-    // Set initial active state
-    updateActiveNav();
-    
-    // Update on scroll with throttling
-    let isScrolling;
-    window.addEventListener('scroll', function() {
-        window.clearTimeout(isScrolling);
-        isScrolling = setTimeout(updateActiveNav, 100);
-    });
-
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                // Remove active class from all links
-                navLinks.forEach(link => link.classList.remove('active'));
-                // Add active class to clicked link
-                this.classList.add('active');
-                
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
         });
-    });
 
-    // [Keep your existing certification graph and other code here]
-});
+        // Current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-    // [Rest of your existing JavaScript code for certification graph and other functionality]
-});
+       <!-- Replace the existing script section with this animated version -->
 
-            // Certification Graph
-            const container = document.getElementById('certification-graph');
-            if (container) {
-                // Clear container
-                container.innerHTML = '';
+    // Certification Network Graph with Animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const width = document.getElementById('certification-graph').clientWidth;
+        const height = 400;
+        const tooltip = d3.select('.cert-tooltip');
+
+        // Certification data with your actual image paths
+        const certs = [
+            { 
+                id: "cdmp", 
+                name: "CDMP Master", 
+                issuer: "DAMA International", 
+                year: "2023", 
+                img: "images/cdmp-master.png",
+                size: 70  // CDMP can be slightly larger
+            },
+            { 
+                id: "aws", 
+                name: "AWS Certified", 
+                issuer: "Amazon Web Services", 
+                year: "2022", 
+                img: "images/aws-certified.png",
+                size: 60
+            },
+            { 
+                id: "oracle", 
+                name: "Oracle Certified", 
+                issuer: "Oracle", 
+                year: "2020", 
+                img: "images/oracle-certified.png",
+                size: 60
+            },
+            { 
+                id: "azure", 
+                name: "Azure Certified", 
+                issuer: "Microsoft", 
+                year: "2021", 
+                img: "images/azure-certified.png",
+                size: 60
+            }
+        ];
+
+        // Create connections between certifications
+        const links = [
+            { source: "cdmp", target: "aws", value: 2 },
+            { source: "cdmp", target: "oracle", value: 1 },
+            { source: "cdmp", target: "azure", value: 1 },
+            { source: "aws", target: "azure", value: 1 }
+        ];
+
+        const svg = d3.select("#certification-graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0, 0, width, height]);
+
+        // Create the simulation with stronger forces
+        const simulation = d3.forceSimulation(certs)
+            .force("link", d3.forceLink(links)
+                .id(d => d.id)
+                .distance(150)  // Increased distance
+                .strength(0.5)  // Stronger connections
+            .force("charge", d3.forceManyBody()
+                .strength(-300))  // Stronger repulsion
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide()
+                .radius(d => d.size + 5)  // Dynamic collision radius
+                .strength(0.7))
+            .force("x", d3.forceX(width / 2).strength(0.05))
+            .force("y", d3.forceY(height / 2).strength(0.05))
+            .alphaDecay(0.01)  // Slower decay for longer animation
+            .velocityDecay(0.4);  // More fluid movement
+
+        // Draw links with animation
+        const link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("stroke", "#3498db")
+            .attr("stroke-opacity", 0.6)
+            .attr("stroke-width", d => d.value)
+            .attr("stroke-dasharray", function() {
+                const length = this.getTotalLength();
+                return `${length} ${length}`;
+            })
+            .attr("stroke-dashoffset", function() {
+                return this.getTotalLength();
+            })
+            .transition()
+            .duration(2000)
+            .attr("stroke-dashoffset", 0);
+
+        // Create node groups with animation
+        const node = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll(".node")
+            .data(certs)
+            .enter().append("g")
+            .attr("class", "node")
+            .call(drag(simulation));
+
+        // Add images with pulsing animation
+        node.append("image")
+            .attr("class", "cert-badge")
+            .attr("xlink:href", d => d.img)
+            .attr("x", d => -d.size/2)
+            .attr("y", d => -d.size/2)
+            .attr("width", d => d.size)
+            .attr("height", d => d.size)
+            .attr("opacity", 0)
+            .transition()
+            .duration(1000)
+            .attr("opacity", 1)
+            .on("mouseover", function(event, d) {
+                // Pause simulation on hover
+                simulation.alphaTarget(0).restart();
                 
-                const width = container.clientWidth;
-                const height = 400;
+                // Highlight animation
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("width", d.size * 1.2)
+                    .attr("height", d.size * 1.2)
+                    .attr("x", -d.size * 0.6)
+                    .attr("y", -d.size * 0.6);
                 
-                // Certification data - Update with your actual image paths
-                const certs = [
-                    { 
-                        id: "cdmp", 
-                        name: "CDMP Master", 
-                        issuer: "DAMA International", 
-                        year: "2023", 
-                        img: "https://bilawalsarwar.com/images/cdmp-master.png",
-                        size: 70
-                    },
-                    { 
-                        id: "aws", 
-                        name: "AWS Certified", 
-                        issuer: "Amazon Web Services", 
-                        year: "2022", 
-                        img: "https://bilawalsarwar.com/images/aws-certified.png",
-                        size: 60
-                    },
-                    { 
-                        id: "oracle", 
-                        name: "Oracle Certified", 
-                        issuer: "Oracle", 
-                        year: "2020", 
-                        img: "https://bilawalsarwar.com/images/oracle-certified.png",
-                        size: 60
-                    },
-                    { 
-                        id: "azure", 
-                        name: "Azure Certified", 
-                        issuer: "Microsoft", 
-                        year: "2021", 
-                        img: "https://bilawalsarwar.com/images/azure-certified.png",
-                        size: 60
-                    }
-                ];
-
-                // Create connections
-                const links = [
-                    { source: "cdmp", target: "aws" },
-                    { source: "cdmp", target: "oracle" },
-                    { source: "cdmp", target: "azure" },
-                    { source: "aws", target: "azure" }
-                ];
-
-                // Create SVG
-                const svg = d3.select("#certification-graph")
-                    .append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("viewBox", [0, 0, width, height]);
-
-                // Create tooltip div
-                const tooltip = d3.select("body").append("div")
-                    .attr("class", "cert-tooltip")
+                // Show tooltip
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 30) + "px")
+                    .html(`<strong>${d.name}</strong><br>${d.issuer}<br>${d.year}`);
+            })
+            .on("mouseout", function(event, d) {
+                // Resume simulation
+                simulation.alphaTarget(0.1).restart();
+                
+                // Return to normal size
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr("width", d.size)
+                    .attr("height", d.size)
+                    .attr("x", -d.size/2)
+                    .attr("y", -d.size/2);
+                
+                // Hide tooltip
+                tooltip.transition()
+                    .duration(500)
                     .style("opacity", 0);
+            });
 
-                // Create simulation
-                const simulation = d3.forceSimulation(certs)
-                    .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-                    .force("charge", d3.forceManyBody().strength(-200))
-                    .force("center", d3.forceCenter(width / 2, height / 2))
-                    .force("collision", d3.forceCollide().radius(d => d.size / 2 + 5));
+        // Add subtle pulsing glow effect
+        node.append("circle")
+            .attr("r", d => d.size/2 + 5)
+            .attr("fill", "none")
+            .attr("stroke", "#3498db")
+            .attr("stroke-width", 0)
+            .attr("stroke-opacity", 0)
+            .transition()
+            .delay(1000)
+            .duration(2000)
+            .attr("stroke-width", 2)
+            .attr("stroke-opacity", 0.3)
+            .call(g => g.transition()
+                .duration(3000)
+                .attr("stroke-width", 0)
+                .attr("stroke-opacity", 0)
+                .on("end", function() {
+                    d3.select(this).transition()
+                        .duration(3000)
+                        .attr("stroke-width", 2)
+                        .attr("stroke-opacity", 0.3);
+                }));
 
-                // Draw links
-                const link = svg.append("g")
-                    .selectAll("line")
-                    .data(links)
-                    .enter().append("line")
-                    .attr("stroke", "#3498db")
-                    .attr("stroke-width", 2)
-                    .attr("stroke-opacity", 0.6);
-
-                // Create node groups
-                const node = svg.append("g")
-                    .selectAll(".node")
-                    .data(certs)
-                    .enter().append("g")
-                    .attr("class", "node")
-                    .call(d3.drag()
-                        .on("start", dragstarted)
-                        .on("drag", dragged)
-                        .on("end", dragended));
-
-                // Add images
-                node.append("image")
-                    .attr("xlink:href", d => d.img)
-                    .attr("x", d => -d.size/2)
-                    .attr("y", d => -d.size/2)
-                    .attr("width", d => d.size)
-                    .attr("height", d => d.size)
-                    .on("mouseover", showTooltip)
-                    .on("mouseout", hideTooltip);
-
-                // Update positions on tick
-                simulation.on("tick", () => {
-                    link
-                        .attr("x1", d => d.source.x)
-                        .attr("y1", d => d.source.y)
-                        .attr("x2", d => d.target.x)
-                        .attr("y2", d => d.target.y);
-
-                    node
-                        .attr("transform", d => `translate(${d.x},${d.y})`);
-                });
-
-                // Drag functions
-                function dragstarted(event, d) {
-                    if (!event.active) simulation.alphaTarget(0.3).restart();
-                    d.fx = d.x;
-                    d.fy = d.y;
-                }
-
-                function dragged(event, d) {
-                    d.fx = event.x;
-                    d.fy = event.y;
-                }
-
-                function dragended(event, d) {
-                    if (!event.active) simulation.alphaTarget(0);
-                    d.fx = null;
-                    d.fy = null;
-                }
-
-                // Tooltip functions
-                function showTooltip(event, d) {
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 1);
-                    tooltip.html(`<strong>${d.name}</strong><br>${d.issuer}<br>${d.year}`)
-                        .style("left", (event.pageX + 15) + "px")
-                        .style("top", (event.pageY - 30) + "px");
-                }
-
-                function hideTooltip() {
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                }
-            }
-
-            // Current year in footer
-            document.getElementById('year').textContent = new Date().getFullYear();
+        // Update positions on each tick
+        simulation.on("tick", () => {
+            link.attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+            
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
+
+        // Drag behavior with smooth animation
+        function drag(simulation) {
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0.1);
+                d.fx = null;
+                d.fy = null;
+                
+                // Add gentle throw animation
+                d.vx = event.subject.vx * 0.8;
+                d.vy = event.subject.vy * 0.8;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+
+        // Add periodic gentle movement
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                simulation.alphaTarget(0.1).restart();
+            }
+        }, 5000);
+    });
     </script>
 </body>
 </html>
