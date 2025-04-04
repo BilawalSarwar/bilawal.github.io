@@ -109,6 +109,47 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
+        
+        /* NEW BADGE SHOWCASE STYLES */
+        .badge-showcase-container {
+            position: relative;
+            height: 400px;
+            background: rgba(248, 249, 250, 0.5);
+            border-radius: 15px;
+            border: 1px dashed rgba(52, 152, 219, 0.3);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .floating-badge {
+            position: absolute;
+            transition: transform 0.5s ease-out;
+            z-index: 10;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            cursor: pointer;
+            width: 80px;
+        }
+        .floating-badge:hover {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+            z-index: 20;
+        }
+        #connection-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .badge-title {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -154,25 +195,9 @@
                 <div class="col-lg-4">
                     <img src="images/profile.jpg" alt="Bilawal Sarwar" class="profile-img rounded-circle mb-4 shadow-lg">
                 </div>
-                <!--<div class="col-lg-8 text-lg-start text-center">
+                <div class="col-lg-8 text-lg-start text-center">
                     <h1 class="display-4 fw-bold mb-3">Bilawal Sarwar</h1>
-                    <p class="lead mb-4">Senior BI & Data Analytics Manager | CDMP Master Level </p>-->
-					
-<div class="col-lg-8 text-lg-start text-center">
-    <h1 class="display-4 fw-bold mb-3">Bilawal Sarwar</h1>
-    <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-4">
-        <p class="lead mb-0">Senior BI & Data Analytics Manager</p>
-        <div class="position-relative">
-            <img src="images/cdmp-master-badge.png" alt="CDMP Master Certified" 
-                 style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
-            <span class="position-absolute bottom-0 start-50 translate-x-50 text-white bg-dark bg-opacity-75 px-2 rounded-pill" 
-                  style="font-size: 0.65rem; white-space: nowrap;">
-                MASTER LEVEL
-            </span>
-        </div>
-    </div>
-					
-					
+                    <p class="lead mb-4">Senior BI & Data Analytics Manager | CDMP Master Level </p>
                     <div class="d-flex flex-wrap justify-content-lg-start justify-content-center gap-3">
                         <a href="https://www.linkedin.com/in/bilawalsarwar/" class="btn btn-light btn-lg px-4">
                             <i class="fab fa-linkedin me-2"></i> LinkedIn
@@ -235,20 +260,20 @@
                                     <li>Implemented Gen AI for Marketing and BI Department</li>
                                 </ul>
                                 <span class="badge" style="background-color: teal;">Python</span>
-								<span  class="badge" style="background-color: #228ba7;">Django</span>
+                                <span  class="badge" style="background-color: #228ba7;">Django</span>
                                 <span  class="badge" style="background-color: #197bb8;">SQL</span>
                                 <span  class="badge" style="background-color: #228ba7;">Vertica</span>
-								<span  class="badge" style="background-color: #228ba7;">Oracle</span>
-								<span  class="badge" style="background-color: #228ba7;">Tableau</span>
-								<span  class="badge" style="background-color: #228ba7;">Power BI</span>
-								<span  class="badge" style="background-color: #228ba7;">Microsoft SSRS</span>
-								<span  class="badge" style="background-color: #228ba7;">Microsoft SQL Server</span>
-								<span  class="badge" style="background-color: #228ba7;">MariaDB</span>
-								<span  class="badge" style="background-color: #228ba7;">Informatica</span>
-								<span  class="badge" style="background-color: #228ba7;">Pentaho</span>
-								<span  class="badge" style="background-color: #228ba7;">Metabase</span>
-								<span  class="badge" style="background-color: #228ba7;">Google PaLM 2</span>
-								<span  class="badge" style="background-color: #228ba7;">LangChain</span>
+                                <span  class="badge" style="background-color: #228ba7;">Oracle</span>
+                                <span  class="badge" style="background-color: #228ba7;">Tableau</span>
+                                <span  class="badge" style="background-color: #228ba7;">Power BI</span>
+                                <span  class="badge" style="background-color: #228ba7;">Microsoft SSRS</span>
+                                <span  class="badge" style="background-color: #228ba7;">Microsoft SQL Server</span>
+                                <span  class="badge" style="background-color: #228ba7;">MariaDB</span>
+                                <span  class="badge" style="background-color: #228ba7;">Informatica</span>
+                                <span  class="badge" style="background-color: #228ba7;">Pentaho</span>
+                                <span  class="badge" style="background-color: #228ba7;">Metabase</span>
+                                <span  class="badge" style="background-color: #228ba7;">Google PaLM 2</span>
+                                <span  class="badge" style="background-color: #228ba7;">LangChain</span>
                             </div>
                         </div>
                     </div>
@@ -267,16 +292,16 @@
                                 <span class="badge bg-primary">Python</span>
                                 <span class="badge bg-primary">MySQL</span>
                                 <span class="badge bg-primary">Hive</span>
-								<span class="badge bg-primary">Impala</span>
-								<span class="badge bg-primary">KNIME Analytics</span>
-								<span class="badge bg-primary">Teradata</span>
-								<span class="badge bg-primary">MicroStrategy Dossier</span>
-								<span class="badge bg-primary">Tableau</span>
+                                <span class="badge bg-primary">Impala</span>
+                                <span class="badge bg-primary">KNIME Analytics</span>
+                                <span class="badge bg-primary">Teradata</span>
+                                <span class="badge bg-primary">MicroStrategy Dossier</span>
+                                <span class="badge bg-primary">Tableau</span>
                             </div>
                         </div>
                     </div>
-					
-					    <div class="card card-hover mb-4">
+                    
+                    <div class="card card-hover mb-4">
                         <div class="card-body">
                             <div class="timeline-item">
                                 <h4>Senior BI Consultant</h4>
@@ -286,20 +311,20 @@
                                     <li>Developed a centralized data model that enabled over 150 end-users to perform self-service reporting, reducing report and dashboard support calls by 45% and decreased IT intervention by 25 hours per month</li>
                                     <li>Built 20 advanced DMR reports using MDX functions, enabling multidimensional data analysis for 5 key business units</li>
                                     <li>Developed Model and Reports to reconcile and validate 35 TB of legacy Teradata and new IBM Netezza TwinFin server, ensuring report numbers matched with over 99% accuracy, thereby enhancing data integrity and reporting reliability</li>
-									<li>Authored essential documentation, coordinated playback sessions with SMEs and IT, and secured formal sign-off of $4 million</li>
+                                    <li>Authored essential documentation, coordinated playback sessions with SMEs and IT, and secured formal sign-off of $4 million</li>
                                 </ul>
                                 <span class="badge bg-primary">Python</span>
                                 <span class="badge bg-primary">IBM Netezza</span>
                                 <span class="badge bg-primary">IBM DB2</span>
-								<span class="badge bg-primary">Watson AI</span>
-								<span class="badge bg-primary">IBM Cognos Analytics</span>
-								<span class="badge bg-primary">IBM DataStage</span>
-								<span class="badge bg-primary">Oracle BIP</span>
-								<span class="badge bg-primary">Tableau</span>
+                                <span class="badge bg-primary">Watson AI</span>
+                                <span class="badge bg-primary">IBM Cognos Analytics</span>
+                                <span class="badge bg-primary">IBM DataStage</span>
+                                <span class="badge bg-primary">Oracle BIP</span>
+                                <span class="badge bg-primary">Tableau</span>
                             </div>
                         </div>
                     </div>
-					
+                    
                 </section>
 
                 <!-- Projects -->
@@ -338,39 +363,54 @@
                 </section>
             </div>
 
-		<!-- Right Column -->
-		<div class="col-lg-4">
-			<!-- Education -->
-			<section id="education" class="mb-5">
-				<h2 class="section-title">Education</h2>
-				
-				<!-- Master's Degree -->
-				<div class="card card-hover mb-4">
-					<div class="card-body">
-						<div class="timeline-item">
-							<h4>MSc Data Analytics</h4>
-							<h5>University of Portsmouth</h5>
-							<p class="text-muted">2022 - 2024</p>
-							<p>Graduated with Distinction </p>
-							<p>Specialization in Artificial Intelligence</p>
-							<p>Research Thesis: "Enhanced AI Churn Prediction Model for Telecom"</p>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Bachelor's Degree -->
-				<div class="card card-hover mb-4">
-					<div class="card-body">
-						<div class="timeline-item">
-							<h4>BS Information Technology</h4>
-							<h5>National University of Sciences and Technology</h5>
-							<p class="text-muted">2007 - 2011</p>
-							<p>Graduated with Honors</p>
-							<p>Specialization in Data Warehousing & Data Mining</p>
-						</div>
-					</div>
-				</div>
-			</section>
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- NEW: Badge Showcase Section -->
+                <section id="badges" class="mb-5">
+                    <h2 class="section-title">Certifications</h2>
+                    <div class="badge-showcase-container">
+                        <div id="badge-showcase">
+                            <img src="images/cdmp-master-badge.png" class="floating-badge" data-speed="0.5" alt="CDMP Master">
+                            <img src="images/aws-certified-badge.png" class="floating-badge" data-speed="0.7" alt="AWS Certified">
+                            <img src="images/oracle-certified-badge.png" class="floating-badge" data-speed="0.6" alt="Oracle Certified">
+                            <img src="images/azure-certified-badge.png" class="floating-badge" data-speed="0.8" alt="Azure Certified">
+                            <canvas id="connection-canvas"></canvas>
+                        </div>
+                        <div class="badge-title">Hover or drag badges to interact</div>
+                    </div>
+                </section>
+
+                <!-- Education -->
+                <section id="education" class="mb-5">
+                    <h2 class="section-title">Education</h2>
+                    
+                    <!-- Master's Degree -->
+                    <div class="card card-hover mb-4">
+                        <div class="card-body">
+                            <div class="timeline-item">
+                                <h4>MSc Data Analytics</h4>
+                                <h5>University of Portsmouth</h5>
+                                <p class="text-muted">2022 - 2024</p>
+                                <p>Graduated with Distinction </p>
+                                <p>Specialization in Artificial Intelligence</p>
+                                <p>Research Thesis: "Enhanced AI Churn Prediction Model for Telecom"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bachelor's Degree -->
+                    <div class="card card-hover mb-4">
+                        <div class="card-body">
+                            <div class="timeline-item">
+                                <h4>BS Information Technology</h4>
+                                <h5>National University of Sciences and Technology</h5>
+                                <p class="text-muted">2007 - 2011</p>
+                                <p>Graduated with Honors</p>
+                                <p>Specialization in Data Warehousing & Data Mining</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- Skills -->
                 <section id="skills" class="mb-5">
@@ -576,6 +616,118 @@
 
         // Current year in footer
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // NEW: Badge Showcase Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('badge-showcase');
+            const badges = document.querySelectorAll('.floating-badge');
+            const canvas = document.getElementById('connection-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            function resizeCanvas() {
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+                drawConnections();
+            }
+            
+            // Position badges randomly initially
+            badges.forEach(badge => {
+                const speed = parseFloat(badge.getAttribute('data-speed'));
+                positionBadge(badge, speed);
+            });
+            
+            // Animate badges
+            function animateBadges() {
+                badges.forEach(badge => {
+                    const speed = parseFloat(badge.getAttribute('data-speed'));
+                    const x = parseFloat(badge.style.left);
+                    const y = parseFloat(badge.style.top);
+                    const angle = parseFloat(badge.getAttribute('data-angle')) || 0;
+                    
+                    // Update position
+                    const newX = x + Math.cos(angle) * speed;
+                    const newY = y + Math.sin(angle) * speed;
+                    
+                    // Boundary check
+                    if (newX < 0 || newX > container.offsetWidth - badge.offsetWidth) {
+                        badge.setAttribute('data-angle', Math.PI - angle);
+                    } else if (newY < 0 || newY > container.offsetHeight - badge.offsetHeight) {
+                        badge.setAttribute('data-angle', -angle);
+                    } else {
+                        badge.style.left = newX + 'px';
+                        badge.style.top = newY + 'px';
+                    }
+                });
+                
+                drawConnections();
+                requestAnimationFrame(animateBadges);
+            }
+            
+            function positionBadge(badge, speed) {
+                badge.style.left = Math.random() * (container.offsetWidth - badge.offsetWidth) + 'px';
+                badge.style.top = Math.random() * (container.offsetHeight - badge.offsetHeight) + 'px';
+                badge.setAttribute('data-angle', Math.random() * Math.PI * 2);
+                badge.setAttribute('data-speed', speed);
+            }
+            
+            function drawConnections() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(52, 152, 219, 0.3)';
+                ctx.lineWidth = 1;
+                
+                badges.forEach((badge1, i) => {
+                    const x1 = parseFloat(badge1.style.left) + badge1.offsetWidth/2;
+                    const y1 = parseFloat(badge1.style.top) + badge1.offsetHeight/2;
+                    
+                    badges.forEach((badge2, j) => {
+                        if (i < j) {
+                            const x2 = parseFloat(badge2.style.left) + badge2.offsetWidth/2;
+                            const y2 = parseFloat(badge2.style.top) + badge2.offsetHeight/2;
+                            const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                            
+                            if (distance < 200) {
+                                ctx.beginPath();
+                                ctx.moveTo(x1, y1);
+                                ctx.lineTo(x2, y2);
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Make badges draggable
+            badges.forEach(badge => {
+                badge.addEventListener('mousedown', function(e) {
+                    const offsetX = e.clientX - parseFloat(badge.style.left);
+                    const offsetY = e.clientY - parseFloat(badge.style.top);
+                    
+                    function moveBadge(e) {
+                        badge.style.left = (e.clientX - offsetX) + 'px';
+                        badge.style.top = (e.clientY - offsetY) + 'px';
+                        drawConnections();
+                    }
+                    
+                    function stopMove() {
+                        document.removeEventListener('mousemove', moveBadge);
+                        document.removeEventListener('mouseup', stopMove);
+                    }
+                    
+                    document.addEventListener('mousemove', moveBadge);
+                    document.addEventListener('mouseup', stopMove);
+                });
+            });
+            
+            // Initialize
+            resizeCanvas();
+            animateBadges();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                resizeCanvas();
+            });
+        });
     </script>
 </body>
 </html>
