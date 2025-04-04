@@ -575,40 +575,73 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Custom JS -->
     <script>
-      // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
+// Replace the existing JavaScript in your file with this corrected version:
+
+// Smooth scrolling and navigation highlighting
+document.addEventListener('DOMContentLoaded', function() {
+    const headerHeight = document.querySelector('header').offsetHeight;
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], header[id]');
+    
+    // Calculate section positions with more precision
+    const sectionPositions = {};
+    sections.forEach(section => {
+        sectionPositions[section.id] = {
+            top: section.offsetTop - headerHeight,
+            bottom: section.offsetTop + section.offsetHeight - headerHeight
+        };
+    });
+
+    // Click handler for precise navigation
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                // Update active state immediately
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Smooth scroll to target
+                window.scrollTo({
+                    top: targetSection.offsetTop - headerHeight + 10,
                     behavior: 'smooth'
                 });
-            });
+            }
         });
+    });
 
-        // Active nav link highlighting
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section');
+    // Improved scroll handler with threshold detection
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY + headerHeight;
+        let currentSection = '';
         
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
+        // Find which section is currently in view
+        for (const [id, positions] of Object.entries(sectionPositions)) {
+            // Use 30% of section height as activation threshold
+            const sectionThreshold = positions.top + ((positions.bottom - positions.top) * 0.3);
             
+            if (scrollPosition >= positions.top && scrollPosition < sectionThreshold) {
+                currentSection = id;
+                break;
+            }
+        }
+        
+        // Update active state
+        if (currentSection) {
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
+                if (link.getAttribute('href') === `#${currentSection}`) {
                     link.classList.add('active');
                 }
             });
-        });
+        }
+    });
 
-        // Current year in footer
-        document.getElementById('year').textContent = new Date().getFullYear();
+    // Current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
 
         // Certification Network Graph
         document.addEventListener('DOMContentLoaded', function() {
