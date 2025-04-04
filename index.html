@@ -110,45 +110,38 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        /* NEW BADGE SHOWCASE STYLES */
-        .badge-showcase-container {
-            position: relative;
+        /* NEW: Certification Network Graph Styles */
+        #certification-graph {
+            width: 100%;
             height: 400px;
-            background: rgba(248, 249, 250, 0.5);
-            border-radius: 15px;
-            border: 1px dashed rgba(52, 152, 219, 0.3);
-            margin-bottom: 2rem;
-            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(248, 249, 250, 0.7);
+            margin-bottom: 1rem;
         }
-        .floating-badge {
-            position: absolute;
-            transition: transform 0.5s ease-out;
-            z-index: 10;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        .cert-badge {
             cursor: pointer;
-            width: 80px;
+            transition: transform 0.3s;
         }
-        .floating-badge:hover {
-            transform: scale(1.2) rotate(5deg);
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
-            z-index: 20;
+        .cert-badge:hover {
+            transform: scale(1.1);
         }
-        #connection-canvas {
+        .cert-tooltip {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            z-index: 100;
         }
-        .badge-title {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            width: 100%;
+        .graph-instruction {
+            font-size: 0.8rem;
+            color: #6c757d;
             text-align: center;
-            font-weight: bold;
-            color: var(--primary-color);
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -173,9 +166,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#skills">Skills</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#projects">Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#certifications">Certifications</a>
@@ -324,7 +314,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </section>
 
                 <!-- Projects -->
@@ -365,18 +354,15 @@
 
             <!-- Right Column -->
             <div class="col-lg-4">
-                <!-- NEW: Badge Showcase Section -->
-                <section id="badges" class="mb-5">
+                <!-- Certifications Network Graph -->
+                <section id="certifications" class="mb-5">
                     <h2 class="section-title">Certifications</h2>
-                    <div class="badge-showcase-container">
-                        <div id="badge-showcase">
-                            <img src="images/cdmp-master-badge.png" class="floating-badge" data-speed="0.5" alt="CDMP Master">
-                            <img src="images/aws-certified-badge.png" class="floating-badge" data-speed="0.7" alt="AWS Certified">
-                            <img src="images/oracle-certified-badge.png" class="floating-badge" data-speed="0.6" alt="Oracle Certified">
-                            <img src="images/azure-certified-badge.png" class="floating-badge" data-speed="0.8" alt="Azure Certified">
-                            <canvas id="connection-canvas"></canvas>
+                    <div class="card card-hover">
+                        <div class="card-body">
+                            <div id="certification-graph"></div>
+                            <div class="cert-tooltip"></div>
+                            <p class="graph-instruction">Drag badges to explore connections between certifications</p>
                         </div>
-                        <div class="badge-title">Hover or drag badges to interact</div>
                     </div>
                 </section>
 
@@ -443,29 +429,6 @@
                                 <span class="skill-pill">Technical Documentation</span>
                                 <span class="skill-pill">Mentoring</span>
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Certifications -->
-                <section id="certifications" class="mb-5">
-                    <h2 class="section-title">Certifications</h2>
-                    <div class="card card-hover">
-                        <div class="card-body">
-                            <ul class="list-unstyled">
-                                <li class="mb-3">
-                                    <h5>AWS Certified Solutions Architect</h5>
-                                    <p class="text-muted">Amazon Web Services | 2022</p>
-                                </li>
-                                <li class="mb-3">
-                                    <h5>Oracle Certified Professional</h5>
-                                    <p class="text-muted">Oracle | 2020</p>
-                                </li>
-                                <li class="mb-3">
-                                    <h5>Microsoft Certified: Azure Fundamentals</h5>
-                                    <p class="text-muted">Microsoft | 2021</p>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </section>
@@ -580,6 +543,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- D3.js for Network Graph -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- Custom JS -->
     <script>
         // Smooth scrolling
@@ -617,116 +582,111 @@
         // Current year in footer
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // NEW: Badge Showcase Animation
+        // Certification Network Graph
         document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('badge-showcase');
-            const badges = document.querySelectorAll('.floating-badge');
-            const canvas = document.getElementById('connection-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            function resizeCanvas() {
-                canvas.width = container.offsetWidth;
-                canvas.height = container.offsetHeight;
-                drawConnections();
-            }
-            
-            // Position badges randomly initially
-            badges.forEach(badge => {
-                const speed = parseFloat(badge.getAttribute('data-speed'));
-                positionBadge(badge, speed);
-            });
-            
-            // Animate badges
-            function animateBadges() {
-                badges.forEach(badge => {
-                    const speed = parseFloat(badge.getAttribute('data-speed'));
-                    const x = parseFloat(badge.style.left);
-                    const y = parseFloat(badge.style.top);
-                    const angle = parseFloat(badge.getAttribute('data-angle')) || 0;
-                    
-                    // Update position
-                    const newX = x + Math.cos(angle) * speed;
-                    const newY = y + Math.sin(angle) * speed;
-                    
-                    // Boundary check
-                    if (newX < 0 || newX > container.offsetWidth - badge.offsetWidth) {
-                        badge.setAttribute('data-angle', Math.PI - angle);
-                    } else if (newY < 0 || newY > container.offsetHeight - badge.offsetHeight) {
-                        badge.setAttribute('data-angle', -angle);
-                    } else {
-                        badge.style.left = newX + 'px';
-                        badge.style.top = newY + 'px';
-                    }
+            const width = document.getElementById('certification-graph').clientWidth;
+            const height = 400;
+            const tooltip = d3.select('.cert-tooltip');
+
+            // Certification data - replace with your actual certifications
+            const certs = [
+                { id: "cdmp", name: "CDMP Master", issuer: "DAMA International", year: "2023", img: "images/cdmp-master.png" },
+                { id: "aws", name: "AWS Certified", issuer: "Amazon Web Services", year: "2022", img: "images/aws-certified.png" },
+                { id: "oracle", name: "Oracle Certified", issuer: "Oracle", year: "2020", img: "images/oracle-certified.png" },
+                { id: "azure", name: "Azure Certified", issuer: "Microsoft", year: "2021", img: "images/azure-certified.png" },
+                { id: "google", name: "Google Certified", issuer: "Google Cloud", year: "2022", img: "images/google-certified.png" }
+            ];
+
+            // Create connections between certifications
+            const links = [
+                { source: "cdmp", target: "aws", value: 1 },
+                { source: "cdmp", target: "oracle", value: 1 },
+                { source: "cdmp", target: "azure", value: 1 },
+                { source: "aws", target: "azure", value: 1 },
+                { source: "oracle", target: "google", value: 1 }
+            ];
+
+            const svg = d3.select("#certification-graph")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const simulation = d3.forceSimulation()
+                .force("link", d3.forceLink().id(d => d.id).distance(120))
+                .force("charge", d3.forceManyBody().strength(-200))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collision", d3.forceCollide().radius(50));
+
+            // Draw links
+            const link = svg.append("g")
+                .selectAll("line")
+                .data(links)
+                .enter().append("line")
+                .attr("stroke", "#3498db")
+                .attr("stroke-opacity", 0.6)
+                .attr("stroke-width", 2);
+
+            // Create groups for each certification
+            const node = svg.append("g")
+                .selectAll(".node")
+                .data(certs)
+                .enter().append("g")
+                .attr("class", "node")
+                .call(drag(simulation));
+
+            // Add images to nodes
+            node.append("image")
+                .attr("class", "cert-badge")
+                .attr("xlink:href", d => d.img)
+                .attr("x", -30)
+                .attr("y", -30)
+                .attr("width", 60)
+                .attr("height", 60)
+                .on("mouseover", function(event, d) {
+                    tooltip.transition().duration(200).style("opacity", 1);
+                    tooltip.html(`${d.name}<br>${d.issuer}<br>${d.year}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.transition().duration(500).style("opacity", 0);
                 });
+
+            simulation.nodes(certs).on("tick", ticked);
+            simulation.force("link").links(links);
+
+            function ticked() {
+                link.attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node.attr("transform", d => `translate(${d.x},${d.y})`);
+            }
+
+            function drag(simulation) {
+                function dragstarted(event, d) {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
                 
-                drawConnections();
-                requestAnimationFrame(animateBadges);
-            }
-            
-            function positionBadge(badge, speed) {
-                badge.style.left = Math.random() * (container.offsetWidth - badge.offsetWidth) + 'px';
-                badge.style.top = Math.random() * (container.offsetHeight - badge.offsetHeight) + 'px';
-                badge.setAttribute('data-angle', Math.random() * Math.PI * 2);
-                badge.setAttribute('data-speed', speed);
-            }
-            
-            function drawConnections() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeStyle = 'rgba(52, 152, 219, 0.3)';
-                ctx.lineWidth = 1;
+                function dragged(event, d) {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                }
                 
-                badges.forEach((badge1, i) => {
-                    const x1 = parseFloat(badge1.style.left) + badge1.offsetWidth/2;
-                    const y1 = parseFloat(badge1.style.top) + badge1.offsetHeight/2;
-                    
-                    badges.forEach((badge2, j) => {
-                        if (i < j) {
-                            const x2 = parseFloat(badge2.style.left) + badge2.offsetWidth/2;
-                            const y2 = parseFloat(badge2.style.top) + badge2.offsetHeight/2;
-                            const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                            
-                            if (distance < 200) {
-                                ctx.beginPath();
-                                ctx.moveTo(x1, y1);
-                                ctx.lineTo(x2, y2);
-                                ctx.stroke();
-                            }
-                        }
-                    });
-                });
+                function dragended(event, d) {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                }
+                
+                return d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended);
             }
-            
-            // Make badges draggable
-            badges.forEach(badge => {
-                badge.addEventListener('mousedown', function(e) {
-                    const offsetX = e.clientX - parseFloat(badge.style.left);
-                    const offsetY = e.clientY - parseFloat(badge.style.top);
-                    
-                    function moveBadge(e) {
-                        badge.style.left = (e.clientX - offsetX) + 'px';
-                        badge.style.top = (e.clientY - offsetY) + 'px';
-                        drawConnections();
-                    }
-                    
-                    function stopMove() {
-                        document.removeEventListener('mousemove', moveBadge);
-                        document.removeEventListener('mouseup', stopMove);
-                    }
-                    
-                    document.addEventListener('mousemove', moveBadge);
-                    document.addEventListener('mouseup', stopMove);
-                });
-            });
-            
-            // Initialize
-            resizeCanvas();
-            animateBadges();
-            
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                resizeCanvas();
-            });
         });
     </script>
 </body>
