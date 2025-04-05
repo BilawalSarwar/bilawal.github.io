@@ -171,6 +171,20 @@
             color: #3498db !important;
             font-weight: 600;
         }
+        /* Add to your existing styles */
+section {
+    scroll-margin-top: 80px; /* matches navbar height */
+    position: relative; /* helps with scroll detection */
+}
+
+.nav-link.active {
+    font-weight: 600;
+    color: var(--secondary-color) !important;
+    background-color: rgba(52, 152, 219, 0.15);
+    border-radius: 4px;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
     </style>
 </head>
 <body>
