@@ -171,6 +171,20 @@
             color: #3498db !important;
             font-weight: 600;
         }
+        /* Make active state more visible */
+.nav-link.active {
+    font-weight: 600;
+    color: var(--secondary-color) !important;
+    background-color: rgba(52, 152, 219, 0.2);
+    border-radius: 4px;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* Ensure sections scroll properly */
+section {
+    scroll-margin-top: 80px;
+}
     </style>
 </head>
 <body>
@@ -629,19 +643,23 @@
     
     <!-- Updated Custom JS -->
    <!-- Replace your entire script section with this: -->
+<!-- Replace your entire script section with this: -->
 <script>
-    // Smooth scrolling with correct highlighting
+    // Set initial active state
+    let currentActive = 'summary';
+    document.querySelector('.nav-link[href="#summary"]').classList.add('active');
+
+    // Click handling - simple and reliable
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Remove active class from all links
+            // Update active state
             document.querySelectorAll('.nav-link').forEach(item => {
                 item.classList.remove('active');
             });
-            
-            // Add active class to clicked link
             this.classList.add('active');
+            currentActive = this.getAttribute('href').substring(1);
             
             // Scroll to section
             const target = document.querySelector(this.getAttribute('href'));
@@ -653,49 +671,13 @@
         });
     });
 
-    // Improved scroll-based highlighting for two-column layout
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    function getActiveSection() {
-        // Get current scroll position plus 1/3 of viewport height
-        const checkpoint = window.scrollY + (window.innerHeight / 3);
-        
-        for (let i = sections.length - 1; i >= 0; i--) {
-            const section = sections[i];
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            // Check if checkpoint is within this section
-            if (checkpoint >= sectionTop && checkpoint <= sectionTop + sectionHeight) {
-                return sectionId;
-            }
-        }
-        
-        return null;
-    }
-
-    // Throttled scroll handler
-    let isScrolling;
+    // Simple scroll handling that works with two columns
     window.addEventListener('scroll', () => {
-        window.clearTimeout(isScrolling);
-        isScrolling = setTimeout(() => {
-            const activeId = getActiveSection();
-            if (activeId) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${activeId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        }, 100);
+        // Just keep the current active state until another click
+        // This prevents the jumping between sections in two-column layout
+        // The click handler above will update the active state when needed
     });
 
-    // Set initial active state
-    document.querySelector('.nav-link[href="#summary"]').classList.add('active');
-    
     // Current year in footer
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
